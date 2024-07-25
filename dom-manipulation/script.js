@@ -12,47 +12,47 @@ addQouteBtn.addEventListener("click", createAddQuoteForm)
 
 const quotes = [
     {
-      text: "The best way to predict the future is to invent it.",
-      category: "Inspiration"
+        text: "The best way to predict the future is to invent it.",
+        category: "Inspiration"
     },
     {
-      text: "Life is 10% what happens to us and 90% how we react to it.",
-      category: "Motivation"
+        text: "Life is 10% what happens to us and 90% how we react to it.",
+        category: "Motivation"
     },
     {
-      text: "Success usually comes to those who are too busy to be looking for it.",
-      category: "Success"
+        text: "Success usually comes to those who are too busy to be looking for it.",
+        category: "Success"
     },
     {
-      text: "Do not watch the clock. Do what it does. Keep going.",
-      category: "Perseverance"
+        text: "Do not watch the clock. Do what it does. Keep going.",
+        category: "Perseverance"
     },
     {
-      text: "Your time is limited, don't waste it living someone else's life.",
-      category: "Life"
+        text: "Your time is limited, don't waste it living someone else's life.",
+        category: "Life"
     },
     {
-      text: "To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment.",
-      category: "Individuality"
+        text: "To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment.",
+        category: "Individuality"
     },
     {
-      text: "Happiness is not something ready-made. It comes from your own actions.",
-      category: "Happiness"
+        text: "Happiness is not something ready-made. It comes from your own actions.",
+        category: "Happiness"
     },
     {
-      text: "The only limit to our realization of tomorrow is our doubts of today.",
-      category: "Potential"
+        text: "The only limit to our realization of tomorrow is our doubts of today.",
+        category: "Potential"
     },
     {
-      text: "The greatest glory in living lies not in never falling, but in rising every time we fall.",
-      category: "Resilience"
+        text: "The greatest glory in living lies not in never falling, but in rising every time we fall.",
+        category: "Resilience"
     },
     {
-      text: "In the end, we will remember not the words of our enemies, but the silence of our friends.",
-      category: "Friendship"
+        text: "In the end, we will remember not the words of our enemies, but the silence of our friends.",
+        category: "Friendship"
     }
-  ];
-  
+];
+
 
 
 function showRandomQuote() {
@@ -69,5 +69,9 @@ function createAddQuoteForm() {
         alert("Kindly enter a qoute and it's category")
     } else {
         quotes.push({ text, category })
+        const p = document.createElement("p")
+        p.textContent = text
+        qouteDiv.innerHTML = ""
+        qouteDiv.appendChild(p)
     }
 }
