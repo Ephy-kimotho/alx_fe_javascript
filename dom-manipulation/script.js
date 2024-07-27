@@ -5,73 +5,85 @@ const newQouteText = document.getElementById("newQuoteText")
 const newQouteCategory = document.getElementById("newQuoteCategory")
 const addQouteBtn = document.getElementById("addQoute")
 
+const downloadBtn = document.getElementById("download-btn")
+const uploadFileInput = document.getElementById("upload-qoutes")
+
+
 
 /*------------------------ EVENT LISTENERS ------------------------ */
 newQouteBtn.addEventListener("click", showRandomQuote)
-addQouteBtn.addEventListener("click", createAddQuoteForm)
+addQouteBtn.addEventListener("click", addQoute)
+downloadBtn.addEventListener("click", downloadQoutes)
+uploadFileInput.addEventListener("change", importJSONFile)
 
-const quotes = [
-    {
-        text: "The best way to predict the future is to invent it.",
-        category: "Inspiration"
-    },
-    {
-        text: "Life is 10% what happens to us and 90% how we react to it.",
-        category: "Motivation"
-    },
-    {
-        text: "Success usually comes to those who are too busy to be looking for it.",
-        category: "Success"
-    },
-    {
-        text: "Do not watch the clock. Do what it does. Keep going.",
-        category: "Perseverance"
-    },
-    {
-        text: "Your time is limited, don't waste it living someone else's life.",
-        category: "Life"
-    },
-    {
-        text: "To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment.",
-        category: "Individuality"
-    },
-    {
-        text: "Happiness is not something ready-made. It comes from your own actions.",
-        category: "Happiness"
-    },
-    {
-        text: "The only limit to our realization of tomorrow is our doubts of today.",
-        category: "Potential"
-    },
-    {
-        text: "The greatest glory in living lies not in never falling, but in rising every time we fall.",
-        category: "Resilience"
-    },
-    {
-        text: "In the end, we will remember not the words of our enemies, but the silence of our friends.",
-        category: "Friendship"
-    }
-];
-
-
+let quotes = JSON.parse(localStorage.getItem("qoutes")) || []
 
 function showRandomQuote() {
     const randomIndex = Math.floor(Math.random() * quotes.length)
     const randomQoute = quotes[randomIndex].text
-    qouteDiv.innerHTML = `<p>${randomQoute}</p>`
+    sessionStorage.setItem("lastViewedQoute", JSON.stringify(randomQoute))
+    qouteDiv.textContent = randomQoute
+
 }
 
-
-function createAddQuoteForm() {
+function addQoute() {
     const text = newQouteText.value.trim()
     const category = newQouteCategory.value.trim()
+
     if (text === "" || category === "") {
         alert("Kindly enter a qoute and it's category")
     } else {
         quotes.push({ text, category })
+        saveQoutes()
+
         const p = document.createElement("p")
         p.textContent = text
+
         qouteDiv.innerHTML = ""
         qouteDiv.appendChild(p)
+    }
+}
+
+function saveQoutes() {
+    localStorage.setItem("qoutes", JSON.stringify(quotes))
+}
+
+
+function showLastViewedQoute() {
+    const lastViewedQoute = JSON.parse(sessionStorage.getItem("lastViewedQoute"))
+    if (lastViewedQoute) { qouteDiv.textContent = lastViewedQoute }
+}
+
+showLastViewedQoute()
+
+function downloadQoutes(e) {
+    const target = e.target
+    const blob = new Blob([quotes], { type: "text/plain" })
+    const url = URL.createObjectURL(blob)
+
+    target.href = url
+    target.download = "Qoutes.txt"
+
+    setTimeout(() => {
+        URL.revokeObjectURL(url)
+    }, 1500)
+
+}
+
+function importJSONFile(e) {
+   const file = e.target.files[0]
+    if (file) {
+        const fr = new FileReader()
+
+        fr.readAsText(file)
+
+        fr.addEventListener("load", () => {
+            const importedQoutes = JSON.parse(fr.result)
+            quotes.push(...importedQoutes)
+            saveQoutes()
+            alert("Quotes imported successfully")
+        })
+    } else {
+        alert("Failed to import qoutes ! Invalid format")
     }
 }
