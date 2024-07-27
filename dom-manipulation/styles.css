@@ -1,0 +1,119 @@
+/* General Styles */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
+
+h1 {
+    text-align: center;
+    color: #1e88e5;
+    margin-top: 20px;
+}
+
+/* Container Styles */
+div {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Button Styles */
+button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 4px;
+    background-color: #1e88e5;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #1565c0;
+}
+
+button:active{
+    box-shadow: inset 4px 4px 5px rgba(0, 0, 0, 0.5);
+}
+
+#newQuote{
+    display: block;
+    margin: 0 auto;
+}
+
+/* Input Styles */
+input[type="text"] {
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+input[type="text"]:focus {
+    border-color: #1e88e5;
+    outline: none;
+}
+
+/* Quote Display Styles */
+#quoteDisplay {
+    font-size: 18px;
+    margin-bottom: 20px;
+    padding: 20px;
+    background: #e3f2fd;
+    border-left: 5px solid #1e88e5;
+    border-radius: 4px;
+    text-align: center;
+}
+
+/* Button Styles for Download Link */
+a#download-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 4px;
+    background-color: #1e88e5;
+    color: white;
+    font-size: 16px;
+    text-decoration: none;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+a#download-btn:hover {
+    background-color: #1565c0;
+}
+
+a#download-btn:active {
+    box-shadow: inset 4px 4px 5px rgba(0, 0, 0, 0.5);
+}
+
+/* Input Styles for File Input */
+input[type="file"] {
+    display: inline-block;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+input[type="file"]:focus {
+    border-color: #1e88e5;
+    outline: none;
+}
