@@ -5,11 +5,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dynamic Quote Generator</title>
+    <link rel="stylesheet" href="./styles.css">
+    <script src="./script.js" defer></script>
 </head>
 
 <body>
     <h1>Dynamic Quote Generator</h1>
-    <div id="quoteDisplay"></div>
+    <div id="quoteDisplay">Do not watch the clock. Do what it does. Keep going.</div>
     <button id="newQuote">Show New Quote</button>
 
     <div>
@@ -17,7 +19,12 @@
         <input id="newQuoteCategory" type="text" placeholder="Enter quote category" />
         <button id="addQoute">Add Quote</button>
     </div>
-    <script src="./script.js"></script>
+
+    <div class="handle-files">
+        <a href="#" id="download-btn">Download Qoutes</a>
+        <input type="file"  id="upload-qoutes" accept=".json">
+    </div>
+    
 </body>
 
 </html>
