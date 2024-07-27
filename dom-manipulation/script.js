@@ -71,18 +71,19 @@ function downloadQoutes(e) {
 }
 
 function importJSONFile(e) {
-   const file = e.target.files[0]
+    const file = e.target.files[0]
     if (file) {
         const fr = new FileReader()
 
         fr.readAsText(file)
 
-        fr.addEventListener("load", () => {
+        fr.onload = () => {
             const importedQoutes = JSON.parse(fr.result)
             quotes.push(...importedQoutes)
             saveQoutes()
             alert("Quotes imported successfully")
-        })
+        }
+
     } else {
         alert("Failed to import qoutes ! Invalid format")
     }
