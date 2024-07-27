@@ -58,7 +58,7 @@ showLastViewedQoute()
 
 function downloadQoutes(e) {
     const target = e.target
-    const blob = new Blob([quotes], { type: "text/plain" })
+    const blob = new Blob([JSON.stringify(quotes)], { type: "application/json" })
     const url = URL.createObjectURL(blob)
 
     target.href = url
