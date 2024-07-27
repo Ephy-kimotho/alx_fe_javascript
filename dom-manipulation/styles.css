@@ -41,11 +41,11 @@ button:hover {
     background-color: #1565c0;
 }
 
-button:active{
+button:active {
     box-shadow: inset 4px 4px 5px rgba(0, 0, 0, 0.5);
 }
 
-#newQuote{
+#newQuote {
     display: block;
     margin: 0 auto;
 }
@@ -116,4 +116,35 @@ input[type="file"] {
 input[type="file"]:focus {
     border-color: #1e88e5;
     outline: none;
+}
+
+/* Select Element Styles */
+label[for="categoryFilter"] {
+    display: block;
+    margin: 20px 0 10px;
+    font-size: 1.2rem;
+    color: #1e88e5;
+    font-weight: bold;
+}
+
+#categoryFilter {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: #fff;
+    color: #333;
+    transition: border-color 0.3s ease;
+}
+
+#categoryFilter:focus {
+    border-color: #1e88e5;
+    outline: none;
+}
+
+#categoryFilter option {
+    padding: 10px;
+    background-color: #fff;
+    color: #333;
 }

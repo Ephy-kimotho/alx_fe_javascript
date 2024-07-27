@@ -7,14 +7,14 @@ const addQouteBtn = document.getElementById("addQoute")
 
 const downloadBtn = document.getElementById("download-btn")
 const uploadFileInput = document.getElementById("upload-qoutes")
-
-
+const categoryFilter = document.getElementById("categoryFilter")
 
 /*------------------------ EVENT LISTENERS ------------------------ */
 newQouteBtn.addEventListener("click", showRandomQuote)
 addQouteBtn.addEventListener("click", addQoute)
 downloadBtn.addEventListener("click", downloadQoutes)
 uploadFileInput.addEventListener("change", importJSONFile)
+categoryFilter.addEventListener("change", filterQuotes)
 
 let quotes = JSON.parse(localStorage.getItem("qoutes")) || []
 
@@ -23,7 +23,6 @@ function showRandomQuote() {
     const randomQoute = quotes[randomIndex].text
     sessionStorage.setItem("lastViewedQoute", JSON.stringify(randomQoute))
     qouteDiv.textContent = randomQoute
-
 }
 
 function addQoute() {
@@ -35,7 +34,7 @@ function addQoute() {
     } else {
         quotes.push({ text, category })
         saveQoutes()
-
+        getCategories()
         const p = document.createElement("p")
         p.textContent = text
 
@@ -81,10 +80,57 @@ function importJSONFile(e) {
             const importedQoutes = JSON.parse(fr.result)
             quotes.push(...importedQoutes)
             saveQoutes()
+            getCategories()
             alert("Quotes imported successfully")
         }
 
     } else {
         alert("Failed to import qoutes ! Invalid format")
+    }
+}
+
+function getCategories() {
+    const categories = quotes.reduce((values, qoute) => {
+        if (!values.includes(qoute.category)) {
+            values.push(qoute.category)
+        }
+        return values
+    }, ["All"])
+    populateCategories(categories)
+}
+
+
+function populateCategories(categories) {
+    const options = categories.map(category => {
+        return `<option value=${category}>${category}</option>`
+    })
+    categoryFilter.innerHTML = options.join("")
+}
+
+getCategories()
+// Load the last selected category from local storage
+const lastSelectedCategory = localStorage.getItem("selectedCategory")
+if(lastSelectedCategory){
+    categoryFilter.value = lastSelectedCategory;
+    filterQuotes({ target: { value: lastSelectedCategory } });
+}
+
+function filterQuotes(e) {
+    const category = e.target.value
+    localStorage.setItem("selectedCategory", category)
+
+    if (category === "All") {
+        showRandomQuote()
+    } else {
+        const filteredQuotes = quotes.filter(qoute => qoute.category === category)
+        if(filterQuotes.length > 0){
+            const randomIndex = Math.floor(Math.random() * filteredQuotes.length)
+            const randomQoute = filteredQuotes[randomIndex].text
+            sessionStorage.setItem("lastViewedQoute", JSON.stringify(randomQoute))
+            qouteDiv.textContent = randomQoute 
+        } else {
+            qouteDiv.textContent = "No qoutes available for this category"
+        }
+
     }
 }
