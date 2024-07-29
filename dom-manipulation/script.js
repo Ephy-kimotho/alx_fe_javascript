@@ -185,7 +185,7 @@ async function syncQuotes() {
         getCategories()
 
         if (newQuotesAdded) {
-            showNotification("New quotes have been added.", "success")
+            showNotification("Quotes synced with server!", "success")
         } else {
             showNotification("Your qoutes up-to-date.", "success")
         }
