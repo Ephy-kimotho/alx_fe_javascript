@@ -9,6 +9,7 @@ const downloadBtn = document.getElementById("download-btn")
 const uploadFileInput = document.getElementById("upload-qoutes")
 const categoryFilter = document.getElementById("categoryFilter")
 
+const notificationDiv = document.getElementById("notification")
 /*------------------------ EVENT LISTENERS ------------------------ */
 newQouteBtn.addEventListener("click", showRandomQuote)
 addQouteBtn.addEventListener("click", addQoute)
@@ -110,7 +111,7 @@ function populateCategories(categories) {
 getCategories()
 // Load the last selected category from local storage
 const lastSelectedCategory = localStorage.getItem("selectedCategory")
-if(lastSelectedCategory){
+if (lastSelectedCategory) {
     categoryFilter.value = lastSelectedCategory;
     filterQuotes({ target: { value: lastSelectedCategory } });
 }
@@ -123,14 +124,90 @@ function filterQuotes(e) {
         showRandomQuote()
     } else {
         const filteredQuotes = quotes.filter(qoute => qoute.category === category)
-        if(filterQuotes.length > 0){
+        if (filterQuotes.length > 0) {
             const randomIndex = Math.floor(Math.random() * filteredQuotes.length)
             const randomQoute = filteredQuotes[randomIndex].text
             sessionStorage.setItem("lastViewedQoute", JSON.stringify(randomQoute))
-            qouteDiv.textContent = randomQoute 
+            qouteDiv.textContent = randomQoute
         } else {
             qouteDiv.textContent = "No qoutes available for this category"
         }
 
     }
 }
+
+/* --------------- Syncing Data with Server and Implementing Conflict Resolution -------------- */
+async function fetchQuotesFromServer() {
+    try {
+        const response = await fetch("https://type.fit/api/quotes")
+        const serverQoutes = await response.json()
+
+        const transformedQoutes = serverQoutes.map(qoute => {
+            return {
+                text: qoute.text,
+                category: "General"
+            }
+        })
+
+        localStorage.setItem("serverQoutes", JSON.stringify(transformedQoutes))
+
+    } catch (error) {
+        showNotification("An error occured while getting qoutes", "error")
+        console.error("Error fetching qoutes from server: ", error)
+    }
+
+}
+
+fetchQuotesFromServer()
+
+async function syncQuotes() {
+    try{
+        const serverQoutes = JSON.parse(localStorage.getItem("serverQoutes")) || []
+        const localQoutes = JSON.parse(localStorage.getItem("qoutes")) || []
+    
+        const mergedQuotes = [...serverQoutes]
+        /* 
+            For each local quote, 
+            check if it already exists in the mergedQuotes using the .some() method.
+            If the quote does not exist in mergedQuotes, add it
+        */
+       let newQuotesAdded = false
+        localQoutes.forEach(localQoute => {
+            const exist = mergedQuotes.some(qoute => qoute.text === localQoute.text)
+            // if true that means the current qoute does exist in the mergedQoutes array
+            // if false then it does not exist in the current mergedQoutes array
+            if (!exist) {
+                mergedQuotes.push(localQoute)
+                newQuotesAdded = true
+            }
+        })
+    
+        localStorage.setItem("qoutes", JSON.stringify(mergedQuotes))
+        getCategories()
+
+        if(newQuotesAdded){
+            showNotification("New quotes have been added.", "success")
+        } else {
+            showNotification("Your qoutes up-to-date.", "success")
+        }
+    } catch(error){
+        showNotification("An error occured while syncing qoutes.", "error")
+        console.error("Error syncing quotes: ", error);
+    }
+}
+
+syncQuotes()
+
+
+function showNotification(message, type){
+    notificationDiv.textContent = message
+    notificationDiv.classList.add("show", type)
+
+    setTimeout(() => {
+        notificationDiv.classList.remove("show", type)
+    }, 5000)
+}
+
+/* --------- periodic server calls and syncing of qoutes ---------*/
+setInterval(fetchQuotesFromServer, 600000)
+setInterval(syncQuotes, 600000)
