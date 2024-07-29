@@ -160,17 +160,17 @@ async function fetchQuotesFromServer() {
 fetchQuotesFromServer()
 
 async function syncQuotes() {
-    try{
+    try {
         const serverQoutes = JSON.parse(localStorage.getItem("serverQoutes")) || []
         const localQoutes = JSON.parse(localStorage.getItem("qoutes")) || []
-    
+
         const mergedQuotes = [...serverQoutes]
         /* 
             For each local quote, 
             check if it already exists in the mergedQuotes using the .some() method.
             If the quote does not exist in mergedQuotes, add it
         */
-       let newQuotesAdded = false
+        let newQuotesAdded = false
         localQoutes.forEach(localQoute => {
             const exist = mergedQuotes.some(qoute => qoute.text === localQoute.text)
             // if true that means the current qoute does exist in the mergedQoutes array
@@ -180,16 +180,16 @@ async function syncQuotes() {
                 newQuotesAdded = true
             }
         })
-    
+
         localStorage.setItem("qoutes", JSON.stringify(mergedQuotes))
         getCategories()
 
-        if(newQuotesAdded){
+        if (newQuotesAdded) {
             showNotification("New quotes have been added.", "success")
         } else {
             showNotification("Your qoutes up-to-date.", "success")
         }
-    } catch(error){
+    } catch (error) {
         showNotification("An error occured while syncing qoutes.", "error")
         console.error("Error syncing quotes: ", error);
     }
@@ -197,8 +197,40 @@ async function syncQuotes() {
 
 syncQuotes()
 
+async function postQuotesToServer() {
+    const localQoutes = JSON.parse(localStorage.getItem("qoutes")) || []
+    try {
 
-function showNotification(message, type){
+        if (localQoutes.length === 0) {
+            showNotification("No qoutes to post", "info")
+            return
+        }
+
+        const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
+            method: "POST",
+            header: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(localQoutes)
+        })
+
+        if (!response.ok) {
+            throw new Error("Failed to post data to server")
+        }
+
+        const result = await response.json()
+        console.log("Server result: ", result)
+
+        showNotification("Quotes successfully posted to server.", "success")
+
+    } catch (error) {
+        showNotification("An error occurred while posting quotes to the server.", "error")
+        console.error("Error posting quotes to server: ", error)
+    }
+}
+postQuotesToServer()
+
+function showNotification(message, type) {
     notificationDiv.textContent = message
     notificationDiv.classList.add("show", type)
 
