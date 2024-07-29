@@ -208,7 +208,7 @@ async function postQuotesToServer() {
 
         const response = await fetch("https://jsonplaceholder.typicode.com/posts", {
             method: "POST",
-            header: {
+            headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify(localQoutes)
