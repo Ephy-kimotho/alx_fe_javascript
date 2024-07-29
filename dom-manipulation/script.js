@@ -139,16 +139,15 @@ function filterQuotes(e) {
 /* --------------- Syncing Data with Server and Implementing Conflict Resolution -------------- */
 async function fetchQuotesFromServer() {
     try {
-        const response = await fetch("https://type.fit/api/quotes")
+        const response = await fetch("https://jsonplaceholder.typicode.com/posts")
         const serverQoutes = await response.json()
 
         const transformedQoutes = serverQoutes.map(qoute => {
             return {
-                text: qoute.text,
+                text: qoute.title,
                 category: "General"
             }
         })
-
         localStorage.setItem("serverQoutes", JSON.stringify(transformedQoutes))
 
     } catch (error) {
