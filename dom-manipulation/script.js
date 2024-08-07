@@ -1,5 +1,5 @@
-const qouteDiv = document.getElementById("quoteDisplay")
 const newQouteBtn = document.getElementById("newQuote")
+const qouteDiv = document.getElementById("quoteDisplay")
 
 const newQouteText = document.getElementById("newQuoteText")
 const newQouteCategory = document.getElementById("newQuoteCategory")
@@ -12,7 +12,7 @@ const categoryFilter = document.getElementById("categoryFilter")
 const notificationDiv = document.getElementById("notification")
 /*------------------------ EVENT LISTENERS ------------------------ */
 newQouteBtn.addEventListener("click", showRandomQuote)
-addQouteBtn.addEventListener("click", addQoute)
+addQouteBtn.addEventListener("click", createAddQuoteForm)
 downloadBtn.addEventListener("click", downloadQoutes)
 uploadFileInput.addEventListener("change", importJSONFile)
 categoryFilter.addEventListener("change", filterQuotes)
@@ -26,7 +26,7 @@ function showRandomQuote() {
     qouteDiv.textContent = randomQoute
 }
 
-function addQoute() {
+function createAddQuoteForm() {
     const text = newQouteText.value.trim()
     const category = newQouteCategory.value.trim()
 
@@ -34,6 +34,8 @@ function addQoute() {
         alert("Kindly enter a qoute and it's category")
     } else {
         quotes.push({ text, category })
+        newQouteText.value = ""
+        newQouteCategory.value = ""
         saveQoutes()
         getCategories()
         const p = document.createElement("p")
